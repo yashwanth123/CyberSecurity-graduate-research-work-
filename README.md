@@ -83,8 +83,3 @@ Thanks to:
 - VTT Research Centre
 - Academic and industrial contributors
 
----
-
-## 📬 Contact
-
-For collaboration or suggestions, reach out via GitHub Issues or pull requests.
