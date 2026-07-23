@@ -1,59 +1,14 @@
+import { useRef } from 'react'
+import { Link } from 'react-router-dom'
 import { useProject } from '../hooks/useProject'
-import { parts, questions } from '../lib/data'
-import { computeMaturity, riskPriority, riskScore } from '../lib/types'
+import { buildReport, importProjectData } from '../lib/report'
+import { saveProject } from '../lib/types'
 import { Card, ProgressBar } from '../components/ui'
 
 export default function Reports() {
-  const { project, resetProject } = useProject()
-
-  const report = {
-    meta: {
-      projectName: project.projectName,
-      organization: project.organization,
-      assessor: project.assessor,
-      sector: project.sector,
-      generatedAt: new Date().toISOString(),
-      updatedAt: project.updatedAt,
-    },
-    compliance: {
-      overallMaturity: computeMaturity(project.compliance, questions.map((q) => q.id)),
-      byPart: parts.map((part) => ({
-        part,
-        maturity: computeMaturity(
-          project.compliance,
-          questions.filter((q) => q.part === part).map((q) => q.id),
-        ),
-        responses: questions
-          .filter((q) => q.part === part)
-          .map((q) => ({
-            id: q.id,
-            standard: q.standard,
-            question: q.question,
-            response: project.compliance[q.id]?.value ?? null,
-            notes: project.compliance[q.id]?.notes ?? '',
-          })),
-      })),
-    },
-    zones: project.zones,
-    risks: project.risks.map((r) => ({
-      ...r,
-      score: riskScore(r.likelihood, r.impact),
-      priority: riskPriority(riskScore(r.likelihood, r.impact)),
-    })),
-    gaps: {
-      complianceBelow50: parts.filter(
-        (p) =>
-          computeMaturity(
-            project.compliance,
-            questions.filter((q) => q.part === p).map((q) => q.id),
-          ) < 50,
-      ),
-      zoneSlGaps: project.zones.filter((z) => z.slAchieved < z.slTarget),
-      criticalRisks: project.risks.filter(
-        (r) => r.status === 'open' && riskPriority(riskScore(r.likelihood, r.impact)) === 'critical',
-      ),
-    },
-  }
+  const { project, setProject, resetProject } = useProject()
+  const fileInputRef = useRef<HTMLInputElement>(null)
+  const report = buildReport(project)
 
   const exportJson = () => {
     const blob = new Blob([JSON.stringify(report, null, 2)], { type: 'application/json' })
@@ -65,17 +20,29 @@ export default function Reports() {
     URL.revokeObjectURL(url)
   }
 
+  const exportProjectJson = () => {
+    const blob = new Blob([JSON.stringify(project, null, 2)], { type: 'application/json' })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = `iec62443-project-${project.projectName.replace(/\s+/g, '-').toLowerCase()}-${Date.now()}.json`
+    a.click()
+    URL.revokeObjectURL(url)
+  }
+
   const exportCsv = () => {
     const rows = [['ID', 'Part', 'Standard', 'Question', 'Response', 'Notes']]
-    for (const q of questions) {
-      rows.push([
-        q.id,
-        q.part,
-        q.standard,
-        `"${q.question.replace(/"/g, '""')}"`,
-        project.compliance[q.id]?.value ?? '',
-        `"${(project.compliance[q.id]?.notes ?? '').replace(/"/g, '""')}"`,
-      ])
+    for (const part of report.compliance.byPart) {
+      for (const r of part.responses) {
+        rows.push([
+          r.id,
+          part.part,
+          r.standard,
+          `"${r.question.replace(/"/g, '""')}"`,
+          r.response ?? '',
+          `"${r.notes.replace(/"/g, '""')}"`,
+        ])
+      }
     }
     const csv = rows.map((r) => r.join(',')).join('\n')
     const blob = new Blob([csv], { type: 'text/csv' })
@@ -87,24 +54,97 @@ export default function Reports() {
     URL.revokeObjectURL(url)
   }
 
+  const handleImport = async (file: File) => {
+    try {
+      const raw = JSON.parse(await file.text())
+      const imported = importProjectData(raw)
+      if (!imported) {
+        alert('Invalid file format. Use a project or report JSON export from this tool.')
+        return
+      }
+      setProject(imported)
+      saveProject(imported)
+      alert(`Imported: ${imported.projectName}`)
+    } catch {
+      alert('Could not parse JSON file.')
+    }
+  }
+
+  const loadSample = async () => {
+    try {
+      const res = await fetch(`${import.meta.env.BASE_URL}sample-assessment.json`)
+      const raw = await res.json()
+      const imported = importProjectData(raw)
+      if (imported) {
+        setProject(imported)
+        saveProject(imported)
+        alert('Loaded Manufacturing Pilot sample case study.')
+      }
+    } catch {
+      alert('Could not load sample assessment.')
+    }
+  }
+
   return (
     <div className="space-y-6">
       <header className="flex flex-wrap items-start justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold text-white">Reports & Export</h1>
           <p className="text-slate-400 mt-1">
-            Export assessment data for thesis appendices or audit evidence
+            Export for thesis appendices, audit evidence, or industry briefings
           </p>
         </div>
-        <div className="flex gap-2">
+        <div className="flex flex-wrap gap-2">
+          <Link
+            to="/print-report"
+            className="px-4 py-2 rounded-lg bg-green-800 hover:bg-green-700 text-sm font-medium"
+          >
+            Print / PDF
+          </Link>
           <button type="button" onClick={exportCsv} className="px-4 py-2 rounded-lg bg-industrial-800 hover:bg-industrial-700 text-sm border border-industrial-700">
             Export CSV
           </button>
-          <button type="button" onClick={exportJson} className="px-4 py-2 rounded-lg bg-industrial-600 hover:bg-industrial-500 text-sm font-medium">
-            Export JSON
+          <button type="button" onClick={exportJson} className="px-4 py-2 rounded-lg bg-industrial-800 hover:bg-industrial-700 text-sm border border-industrial-700">
+            Export Report JSON
+          </button>
+          <button type="button" onClick={exportProjectJson} className="px-4 py-2 rounded-lg bg-industrial-600 hover:bg-industrial-500 text-sm font-medium">
+            Export Project JSON
           </button>
         </div>
       </header>
+
+      <Card title="Import & Samples">
+        <p className="text-sm text-slate-400 mb-4">
+          Restore a saved assessment or load the demo case study to show industry stakeholders.
+        </p>
+        <div className="flex flex-wrap gap-2">
+          <button
+            type="button"
+            onClick={() => fileInputRef.current?.click()}
+            className="px-4 py-2 rounded-lg bg-industrial-800 hover:bg-industrial-700 text-sm border border-industrial-700"
+          >
+            Import JSON
+          </button>
+          <button
+            type="button"
+            onClick={loadSample}
+            className="px-4 py-2 rounded-lg bg-amber-900/50 hover:bg-amber-900 text-sm border border-amber-800 text-amber-200"
+          >
+            Load Sample Case Study
+          </button>
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept=".json"
+            className="hidden"
+            onChange={(e) => {
+              const f = e.target.files?.[0]
+              if (f) handleImport(f)
+              e.target.value = ''
+            }}
+          />
+        </div>
+      </Card>
 
       <Card title="Executive Summary">
         <div className="grid sm:grid-cols-2 gap-6">
@@ -163,7 +203,7 @@ export default function Reports() {
       >
         <p className="text-sm text-slate-400">
           Data is stored in your browser (localStorage). Export JSON before clearing browser data.
-          Use exported files in <code className="text-industrial-400">docs/thesis/data/</code> for thesis evidence.
+          See <Link to="/about" className="text-industrial-400 hover:underline">About</Link> for citation and credit guidance.
         </p>
       </Card>
     </div>

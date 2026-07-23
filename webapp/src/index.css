@@ -18,3 +18,21 @@ body {
   background: #2563eb;
   border-radius: 4px;
 }
+
+@media print {
+  body {
+    background: white !important;
+    color: black !important;
+  }
+  .no-print,
+  aside,
+  nav {
+    display: none !important;
+  }
+  main {
+    overflow: visible !important;
+  }
+  .print-report {
+    box-shadow: none !important;
+  }
+}

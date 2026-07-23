@@ -4,7 +4,24 @@ Curated knowledge base and **practical toolkit** for IEC 62443 — the internati
 
 ---
 
-## What's new
+## Get credit & use in industry
+
+See **[docs/ROADMAP.md](docs/ROADMAP.md)** for the full 90-day plan covering:
+
+- Thesis completion and publication strategy
+- Zenodo DOI and `CITATION.cff` for academic credit
+- Industry deployment and pilot assessment guide
+- Resume/portfolio positioning for OT security roles
+
+| Track | Start here |
+|-------|------------|
+| **Academic** | [`docs/thesis/`](docs/thesis/) + [`publication-strategy.md`](docs/thesis/publication-strategy.md) |
+| **Industry** | [`docs/industry/implementation-guide.md`](docs/industry/implementation-guide.md) |
+| **Cite this repo** | [`CITATION.cff`](CITATION.cff) — add your name and ORCID |
+
+---
+
+## What's included
 
 | Component | Description |
 |-----------|-------------|

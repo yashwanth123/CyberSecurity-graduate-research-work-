@@ -1,0 +1,113 @@
+{
+  "projectName": "Manufacturing Pilot — Assembly Line",
+  "organization": "Example Plant (Anonymized)",
+  "assessor": "OT Security Assessment Team",
+  "sector": "Manufacturing",
+  "createdAt": "2026-01-15T09:00:00.000Z",
+  "updatedAt": "2026-03-20T14:30:00.000Z",
+  "compliance": {
+    "Q001": { "value": "partial", "notes": "Risk process exists but not fully documented per 62443-3-2" },
+    "Q002": { "value": "no", "notes": "Zones not formally mapped to business processes" },
+    "Q003": { "value": "partial", "notes": "Foundational requirements referenced but incomplete" },
+    "Q004": { "value": "yes", "notes": "Business rationale documented after 2024 incident review" },
+    "Q005": { "value": "partial", "notes": "IACS-SMS draft in progress" },
+    "Q006": { "value": "no", "notes": "No formal cybersecurity coordinator assigned" },
+    "Q007": { "value": "partial", "notes": "Patch policy exists for IT; OT exceptions undocumented" },
+    "Q008": { "value": "yes", "notes": "Annual security awareness for OT staff" },
+    "Q009": { "value": "no", "notes": "Vendor remote access not logged centrally" },
+    "Q010": { "value": "partial", "notes": "Firewall between L4 and L3; rules not reviewed quarterly" }
+  },
+  "zones": [
+    {
+      "id": "zone-l5",
+      "name": "Level 5 — Enterprise",
+      "description": "Corporate IT, ERP, email",
+      "assets": "ERP, Active Directory, email gateway",
+      "slTarget": 2,
+      "slAchieved": 2,
+      "conduitTo": "Level 4 — Site Business"
+    },
+    {
+      "id": "zone-l4",
+      "name": "Level 4 — Site Business",
+      "description": "Plant MES, scheduling, site servers",
+      "assets": "MES server, batch historian, site file server",
+      "slTarget": 2,
+      "slAchieved": 2,
+      "conduitTo": "Level 3.5 — DMZ"
+    },
+    {
+      "id": "zone-dmz",
+      "name": "Level 3.5 — DMZ",
+      "description": "Jump servers, antivirus updates, data diode",
+      "assets": "Jump host, patch relay, OT AV server",
+      "slTarget": 3,
+      "slAchieved": 2,
+      "conduitTo": "Level 3 — Operations"
+    },
+    {
+      "id": "zone-l3",
+      "name": "Level 3 — Operations",
+      "description": "HMIs, engineering workstations, historians",
+      "assets": "3x HMI, 2x EWS, OSIsoft PI connector",
+      "slTarget": 3,
+      "slAchieved": 2,
+      "conduitTo": "Level 2 — Control"
+    },
+    {
+      "id": "zone-l2",
+      "name": "Level 2 — Control",
+      "description": "PLCs and DCS controllers",
+      "assets": "Siemens S7-1500 x4, safety PLC",
+      "slTarget": 3,
+      "slAchieved": 3,
+      "conduitTo": "Level 1 — Basic Control"
+    }
+  ],
+  "risks": [
+    {
+      "id": "risk-1",
+      "asset": "Vendor remote access jump server",
+      "threat": "Unauthorized external access to OT network",
+      "vulnerability": "Shared credentials, no MFA on legacy jump box",
+      "likelihood": 4,
+      "impact": 5,
+      "zone": "Level 3.5 — DMZ",
+      "mitigation": "Deploy MFA, session recording, time-limited vendor accounts per 62443-2-1",
+      "status": "open"
+    },
+    {
+      "id": "risk-2",
+      "asset": "Siemens S7-1500 PLCs",
+      "threat": "Exploitation of unpatched firmware",
+      "vulnerability": "Firmware 2 years behind; no test environment for patches",
+      "likelihood": 3,
+      "impact": 5,
+      "zone": "Level 2 — Control",
+      "mitigation": "Establish OT patch test bed; implement compensating network monitoring",
+      "status": "open"
+    },
+    {
+      "id": "risk-3",
+      "asset": "Engineering workstations",
+      "threat": "Malware introduction via USB",
+      "vulnerability": "USB ports enabled; no application whitelisting",
+      "likelihood": 4,
+      "impact": 4,
+      "zone": "Level 3 — Operations",
+      "mitigation": "USB control policy, application allowlisting, EWS hardening baseline",
+      "status": "open"
+    },
+    {
+      "id": "risk-4",
+      "asset": "Flat network segment (legacy)",
+      "threat": "Lateral movement from compromised IT asset",
+      "vulnerability": "Legacy Line 1 still flat before PLC retrofit",
+      "likelihood": 3,
+      "impact": 4,
+      "zone": "Level 3 — Operations",
+      "mitigation": "Micro-segmentation project Q3; interim ACLs on core switch",
+      "status": "mitigated"
+    }
+  ]
+}

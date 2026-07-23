@@ -7,6 +7,8 @@ import Zones from './pages/Zones'
 import Risks from './pages/Risks'
 import Standards from './pages/Standards'
 import Reports from './pages/Reports'
+import PrintReport from './pages/PrintReport'
+import About from './pages/About'
 
 export default function App() {
   return (
@@ -19,6 +21,8 @@ export default function App() {
         <Route path="/risks" element={<Risks />} />
         <Route path="/standards" element={<Standards />} />
         <Route path="/reports" element={<Reports />} />
+        <Route path="/print-report" element={<PrintReport />} />
+        <Route path="/about" element={<About />} />
       </Routes>
     </Layout>
   )

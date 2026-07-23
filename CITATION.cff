@@ -1,0 +1,27 @@
+cff-version: 1.2.0
+title: IEC 62443 Industrial Cybersecurity Assessment Platform
+message: >-
+  If you use this software or dataset in academic work, please cite it using
+  the metadata below.
+type: software
+authors:
+  - family-names: "[Your Last Name]"
+    given-names: "[Your First Name]"
+    orcid: "https://orcid.org/0000-0000-0000-0000"
+repository-code: "https://github.com/yashwanth123/CyberSecurity-graduate-research-work-"
+url: "https://github.com/yashwanth123/CyberSecurity-graduate-research-work-"
+license: MIT
+version: 1.0.0
+date-released: "2026-07-23"
+keywords:
+  - IEC 62443
+  - industrial cybersecurity
+  - IACS
+  - OT security
+  - SCADA
+  - risk assessment
+  - compliance
+preferred-citation: >-
+  [Your Last Name], [Your First Name]. (2026). IEC 62443 Industrial
+  Cybersecurity Assessment Platform (v1.0.0) [Computer software].
+  GitHub. https://github.com/yashwanth123/CyberSecurity-graduate-research-work-
