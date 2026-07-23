@@ -1,0 +1,25 @@
+Dear ICSCI 2026 Program Chairs,
+
+Please find our submission entitled:
+
+  "An Open IEC 62443 Assessment Framework for Manufacturing IACS: 
+   Design and Empirical Case Study"
+
+We present an open-source assessment platform that operationalizes IEC 62443 
+for manufacturing IACS, combining compliance checklists, Security Level analysis, 
+zones/conduits modeling, and risk registration. A case study at an anonymized 
+automotive assembly line demonstrates 49.1% compliance maturity, SL gaps at 
+DMZ/Operations zones, and four critical OT risks.
+
+We believe this work fits the workshop themes of novel methods for ICS/OT security, 
+OT supply chain exposure, and cloud/MES integration into operational technology.
+
+Thank you for your consideration.
+
+Sincerely,
+[Your Name]
+[Email]
+[ORCID]
+
+Note: EDAS may not require a cover letter — use only if submission system 
+has a "comments to chairs" field.
