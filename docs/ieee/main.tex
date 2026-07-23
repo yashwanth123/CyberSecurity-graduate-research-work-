@@ -13,19 +13,19 @@
 \usepackage{newtxtext,newtxmath}
 \usepackage{courier}
 
-% EDAS/MILCOM formatting requirements (buffer above nominal minima:
-% checker reports ~0.04in less top margin and ~0.01in less gutter than set)
+% EDAS/MILCOM formatting (checker measures ~0.08in less top margin than set)
 \setlength{\columnsep}{0.27in}
-\IEEEsettopmargin{0.82in}
+\IEEEsettopmargin{0.90in}
 
 \makeatletter
 \renewcommand{\normalsize}{%
-   \@setfontsize\normalsize{11}{13.6}%
+   \@setfontsize\normalsize{11.5}{14}%
    \abovedisplayskip 10\p@ \@plus2\p@ \@minus5\p@
    \abovedisplayshortskip \z@ \@plus3\p@
    \belowdisplayshortskip 6\p@ \@plus3\p@ \@minus3\p@
    \belowdisplayskip \abovedisplayskip
    \let\@listi\@listI}
+\normalsize
 \makeatother
 
 \begin{document}
