@@ -1,0 +1,45 @@
+{
+  "overallMaturity": 49.1,
+  "byPart": {
+    "General": {
+      "maturity": 66.7,
+      "counts": {
+        "yes": 1,
+        "partial": 2,
+        "no": 0
+      },
+      "total": 3
+    },
+    "Policies and Procedures": {
+      "maturity": 55.0,
+      "counts": {
+        "yes": 8,
+        "partial": 6,
+        "no": 6
+      },
+      "total": 20
+    },
+    "System": {
+      "maturity": 43.6,
+      "counts": {
+        "yes": 14,
+        "partial": 20,
+        "no": 21
+      },
+      "total": 55
+    },
+    "Component": {
+      "maturity": 53.4,
+      "counts": {
+        "yes": 11,
+        "partial": 9,
+        "no": 9
+      },
+      "total": 29
+    }
+  },
+  "zones": 5,
+  "slGaps": 2,
+  "openRisks": 8,
+  "criticalRisks": 4
+}

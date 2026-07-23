@@ -1,0 +1,31 @@
+{
+  "title": "IEC 62443 Industrial Cybersecurity Assessment Platform",
+  "description": "Open assessment platform for IEC 62443 compliance, Security Level analysis, zones/conduits, and OT risk registration. Includes PhD thesis materials and manufacturing case study.",
+  "upload_type": "software",
+  "publication_date": "2026-07-23",
+  "creators": [
+    {
+      "name": "[Your Last Name], [Your First Name]",
+      "affiliation": "[Your University]",
+      "orcid": "0000-0000-0000-0000"
+    }
+  ],
+  "keywords": [
+    "IEC 62443",
+    "IACS",
+    "industrial cybersecurity",
+    "OT security",
+    "SCADA",
+    "design science research",
+    "risk assessment"
+  ],
+  "license": "MIT",
+  "related_identifiers": [
+    {
+      "identifier": "https://github.com/yashwanth123/CyberSecurity-graduate-research-work-",
+      "relation": "isSupplementTo",
+      "scheme": "url"
+    }
+  ],
+  "version": "1.0.0"
+}

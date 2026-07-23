@@ -1,0 +1,100 @@
+[
+  {
+    "iecPart": "General",
+    "iecStandard": "62443-1-1",
+    "csfFunction": "Identify",
+    "csfCategory": "ID.AM",
+    "description": "Asset management and IACS terminology alignment"
+  },
+  {
+    "iecPart": "General",
+    "iecStandard": "62443-1-4",
+    "csfFunction": "Identify",
+    "csfCategory": "ID.GV",
+    "description": "Roles, responsibilities, and security lifecycle"
+  },
+  {
+    "iecPart": "Policies and Procedures",
+    "iecStandard": "62443-2-1",
+    "csfFunction": "Identify",
+    "csfCategory": "ID.GV",
+    "description": "IACS Security Management System establishment"
+  },
+  {
+    "iecPart": "Policies and Procedures",
+    "iecStandard": "62443-2-1",
+    "csfFunction": "Protect",
+    "csfCategory": "PR.AC",
+    "description": "Access control policies for IACS"
+  },
+  {
+    "iecPart": "Policies and Procedures",
+    "iecStandard": "62443-2-3",
+    "csfFunction": "Protect",
+    "csfCategory": "PR.IP",
+    "description": "Patch management in IACS environments"
+  },
+  {
+    "iecPart": "Policies and Procedures",
+    "iecStandard": "62443-2-4",
+    "csfFunction": "Identify",
+    "csfCategory": "ID.SC",
+    "description": "Service provider security requirements"
+  },
+  {
+    "iecPart": "System",
+    "iecStandard": "62443-3-2",
+    "csfFunction": "Identify",
+    "csfCategory": "ID.RA",
+    "description": "Risk assessment and zones/conduits design"
+  },
+  {
+    "iecPart": "System",
+    "iecStandard": "62443-3-2",
+    "csfFunction": "Protect",
+    "csfCategory": "PR.AC",
+    "description": "Conduit access control between zones"
+  },
+  {
+    "iecPart": "System",
+    "iecStandard": "62443-3-3",
+    "csfFunction": "Protect",
+    "csfCategory": "PR.DS",
+    "description": "System security requirements and data protection"
+  },
+  {
+    "iecPart": "System",
+    "iecStandard": "62443-3-3",
+    "csfFunction": "Detect",
+    "csfCategory": "DE.CM",
+    "description": "Security event monitoring on IACS networks"
+  },
+  {
+    "iecPart": "System",
+    "iecStandard": "62443-3-3",
+    "csfFunction": "Respond",
+    "csfCategory": "RS.RP",
+    "description": "Incident response planning for OT systems"
+  },
+  {
+    "iecPart": "Component",
+    "iecStandard": "62443-4-1",
+    "csfFunction": "Protect",
+    "csfCategory": "PR.IP",
+    "description": "Secure product development lifecycle"
+  },
+  {
+    "iecPart": "Component",
+    "iecStandard": "62443-4-2",
+    "csfFunction": "Protect",
+    "csfCategory": "PR.PT",
+    "description": "Technical security requirements for IACS components"
+  },
+  {
+    "iecPart": "System",
+    "iecStandard": "62443-3-3",
+    "csfFunction": "Recover",
+    "csfCategory": "RC.RP",
+    "description": "Recovery planning and backup verification"
+  }
+]
