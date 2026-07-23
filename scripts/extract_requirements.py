@@ -31,14 +31,21 @@ def extract() -> dict:
             })
 
     questions = []
+    last_part = last_sub = last_std = None
     for i, r in enumerate(list(wb["Sheet2"].iter_rows(values_only=True))[1:], start=1):
         r = list(r) + [None] * 10
         if r[4]:
+            if r[0]:
+                last_part = r[0]
+            if r[1]:
+                last_sub = r[1]
+            if r[2]:
+                last_std = r[2]
             questions.append({
                 "id": f"Q{i:03d}",
-                "part": r[0],
-                "subcategory": r[1],
-                "standard": r[2],
+                "part": last_part,
+                "subcategory": last_sub,
+                "standard": last_std,
                 "framework_category": r[3],
                 "question": str(r[4]).strip(),
                 "sl1": r[6], "sl2": r[7], "sl3": r[8], "sl4": r[9],

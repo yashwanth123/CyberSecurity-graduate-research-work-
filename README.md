@@ -4,6 +4,29 @@ Curated knowledge base and **practical toolkit** for IEC 62443 — the internati
 
 ---
 
+## PhD thesis & journal paper (ready drafts)
+
+| Material | Location |
+|----------|----------|
+| **PhD package index** | [`docs/thesis/phd/README.md`](docs/thesis/phd/README.md) |
+| Chapters 1, 3, 4, 5 (draft) | [`docs/thesis/phd/`](docs/thesis/phd/) |
+| **Journal manuscript** | [`docs/thesis/paper/manuscript.md`](docs/thesis/paper/manuscript.md) |
+| BibTeX references | [`docs/thesis/paper/references.bib`](docs/thesis/paper/references.bib) |
+| Defense outline + demo | [`docs/thesis/defense-outline.md`](docs/thesis/defense-outline.md) |
+| Case study statistics | [`docs/thesis/phd/case-study-statistics.json`](docs/thesis/phd/case-study-statistics.json) |
+
+## Industry deployment (production-ready)
+
+```bash
+docker compose up -d --build   # http://localhost:8080
+```
+
+| Guide | Location |
+|-------|----------|
+| Deployment | [`docs/industry/deployment.md`](docs/industry/deployment.md) |
+| Implementation | [`docs/industry/implementation-guide.md`](docs/industry/implementation-guide.md) |
+| 15-min demo script | [`docs/industry/demo-script.md`](docs/industry/demo-script.md) |
+
 ## Get credit & use in industry
 
 See **[docs/ROADMAP.md](docs/ROADMAP.md)** for the full 90-day plan covering:

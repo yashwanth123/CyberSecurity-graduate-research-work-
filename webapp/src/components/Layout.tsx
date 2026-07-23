@@ -8,6 +8,7 @@ const links = [
   { to: '/risks', label: 'Risk Register' },
   { to: '/standards', label: 'Standards' },
   { to: '/reports', label: 'Reports' },
+  { to: '/framework-mapping', label: 'NIST CSF Map' },
   { to: '/about', label: 'About & Credit' },
 ]
 
