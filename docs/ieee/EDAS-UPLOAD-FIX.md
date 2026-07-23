@@ -48,8 +48,8 @@ We validate the artifact through a pilot case study at an anonymized
 ```latex
 \usepackage{newtxtext,newtxmath}
 \usepackage{courier}
-\setlength{\columnsep}{0.25in}
-\IEEEsettopmargin{0.75in}
+\setlength{\columnsep}{0.27in}
+\IEEEsettopmargin{0.82in}
 ```
 
 This fixes: **font**, **gutter**, **top margin**.
@@ -107,7 +107,7 @@ Add this **before** `\begin{document}`:
 ```
 [ ] Abstract says "pilot case study"
 [ ] Risk score says "at least 15" (not ≥ symbol)
-[ ] newtxtext + columnsep 0.25in + IEEEsettopmargin 0.75in
+[ ] newtxtext + columnsep 0.27in + IEEEsettopmargin 0.82in
 [ ] Figure is PNG not PDF
 [ ] Recompile → download → upload to EDAS
 ```
