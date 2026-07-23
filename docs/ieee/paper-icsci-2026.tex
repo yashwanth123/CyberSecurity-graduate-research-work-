@@ -9,6 +9,7 @@
 \usepackage{xcolor}
 \usepackage{url}
 \usepackage{booktabs}
+\usepackage{float}
 
 \begin{document}
 
@@ -81,16 +82,16 @@ The platform comprises four browser-based modules backed by local storage (no cl
 
 \textbf{Deployment.} Static build (React/Vite) deploys via Docker/nginx or GitHub Pages. Python scripts regenerate JSON from the source Excel matrix.
 
-\begin{figure}[!t]
-\centering
-\includegraphics[width=\linewidth]{figures/maturity-by-part.pdf}
-\caption{Compliance maturity by IEC 62443 part (case study, $n=107$ questions). Dashed line: overall 49.1\%.}
-\label{fig:maturity}
-\end{figure}
-
 \section{Case Study Results}
 \subsection{Compliance Maturity}
 Overall maturity was \textbf{49.1\%}. By standard part: General 66.7\%, Policies and Procedures 55.0\%, System 43.6\%, Component 53.4\%. System requirements---including monitoring, segmentation verification, and SL-A documentation---showed the largest gap, consistent with brownfield sites lacking dedicated OT security staff.
+
+\begin{figure}[!htbp]
+\centering
+\includegraphics[width=\linewidth]{figures/maturity-by-part.pdf}
+\caption{Compliance maturity by IEC 62443 part (case study, $n=107$ questions).}
+\label{fig:maturity}
+\end{figure}
 
 \subsection{Security Level Analysis}
 Five zones were modeled (Enterprise through Control). Two exhibited SL gaps:
