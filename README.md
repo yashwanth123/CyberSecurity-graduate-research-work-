@@ -4,6 +4,16 @@ Curated knowledge base and **practical toolkit** for IEC 62443 — the internati
 
 ---
 
+## IEEE paper (1st publication target)
+
+**Deadline Aug 16, 2026 — ICSCI 2026 (IEEE MILCOM ICS workshop)**
+
+| Step | Doc |
+|------|-----|
+| **Start here** | [`docs/ieee/STEP-BY-STEP.md`](docs/ieee/STEP-BY-STEP.md) |
+| IEEE LaTeX draft | [`docs/ieee/paper-icsci-2026.tex`](docs/ieee/paper-icsci-2026.tex) |
+| Submit | https://edas.info/N35547 |
+
 ## PhD thesis & journal paper (ready drafts)
 
 | Material | Location |
