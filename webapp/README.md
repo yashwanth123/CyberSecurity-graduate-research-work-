@@ -2,7 +2,7 @@
 
 Practical assessment platform for **industrial automation** environments, aligned with IEC 62443 compliance and risk assessment workflows.
 
-**Live demo:** https://yashwanth123.github.io/CyberSecurity-graduate-research-work-/
+**Live demo:** https://yashwanth123.github.io/CyberSecurity-graduate-research-work-/#/
 
 **Truth & scope (read first):** [docs/TRUTH-AND-SCOPE.md](../docs/TRUTH-AND-SCOPE.md)  
 **System design:** [docs/architecture/SYSTEM-DESIGN.md](../docs/architecture/SYSTEM-DESIGN.md)

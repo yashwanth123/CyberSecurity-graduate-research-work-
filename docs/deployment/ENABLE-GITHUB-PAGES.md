@@ -27,7 +27,7 @@ Wait ~1–2 minutes for green checkmark.
 ## Step 3 — Live URL
 
 ```
-https://yashwanth123.github.io/CyberSecurity-graduate-research-work-/
+https://yashwanth123.github.io/CyberSecurity-graduate-research-work-/#/
 ```
 
 Share with Professor Abdolee. Review steps:
@@ -71,7 +71,7 @@ Share the `https://*.ngrok.io` URL (expires when tunnel stops)
 ## Verify deploy worked
 
 ```bash
-curl -I https://yashwanth123.github.io/CyberSecurity-graduate-research-work-/
+curl -I https://yashwanth123.github.io/CyberSecurity-graduate-research-work-/#/
 ```
 
 Expect `HTTP/2 200`

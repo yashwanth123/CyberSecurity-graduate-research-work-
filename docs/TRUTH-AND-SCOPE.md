@@ -65,7 +65,7 @@ Read this before reviewing the paper, demo, or live web app. Written for advisor
 
 ## How to review the live demo (3 minutes)
 
-**URL:** https://yashwanth123.github.io/CyberSecurity-graduate-research-work-/
+**URL:** https://yashwanth123.github.io/CyberSecurity-graduate-research-work-/#/
 
 1. Open link → click **Reports** (left sidebar)
 2. Click **Load Sample Case Study** (yellow button)

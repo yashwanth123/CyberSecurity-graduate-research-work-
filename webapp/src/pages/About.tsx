@@ -2,7 +2,7 @@ import { Card } from '../components/ui'
 import { useProject } from '../hooks/useProject'
 import { loadSampleCaseStudy } from '../lib/sample'
 
-const LIVE_DEMO = 'https://yashwanth123.github.io/CyberSecurity-graduate-research-work-/'
+const LIVE_DEMO = 'https://yashwanth123.github.io/CyberSecurity-graduate-research-work-/#/'
 const REPO = 'https://github.com/yashwanth123/CyberSecurity-graduate-research-work-'
 const TRUTH_DOC = `${REPO}/blob/cursor/thesis-and-webapp-848f/docs/TRUTH-AND-SCOPE.md`
 const SYSTEM_DESIGN = `${REPO}/blob/cursor/thesis-and-webapp-848f/docs/architecture/SYSTEM-DESIGN.md`
