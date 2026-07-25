@@ -2,7 +2,14 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import { BrowserRouter, HashRouter } from 'react-router-dom'
 import App from './App'
+import ErrorBoundary from './components/ErrorBoundary'
 import './index.css'
+
+declare global {
+  interface Window {
+    __APP_BOOT_TIMEOUT?: number
+  }
+}
 
 // GitHub Pages serves from a subpath (e.g. /repo-name/). HashRouter avoids blank-page routing bugs.
 const isGitHubPages = import.meta.env.BASE_URL && import.meta.env.BASE_URL !== '/'
@@ -13,10 +20,14 @@ if (isGitHubPages && !window.location.hash) {
 
 const Router = isGitHubPages ? HashRouter : BrowserRouter
 
+window.clearTimeout(window.__APP_BOOT_TIMEOUT)
+
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <Router>
-      <App />
-    </Router>
+    <ErrorBoundary>
+      <Router>
+        <App />
+      </Router>
+    </ErrorBoundary>
   </React.StrictMode>,
 )

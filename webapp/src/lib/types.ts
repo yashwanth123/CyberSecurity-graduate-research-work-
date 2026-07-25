@@ -65,7 +65,11 @@ export function loadProject(): ProjectData {
 
 export function saveProject(data: ProjectData): void {
   data.updatedAt = new Date().toISOString()
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(data))
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(data))
+  } catch {
+    /* private browsing / storage quota — app still works in-memory */
+  }
 }
 
 export function computeMaturity(

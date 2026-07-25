@@ -5,9 +5,95 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>IEC 62443 Assessment Platform</title>
     <meta name="description" content="Compliance, risk assessment, and security level tools for industrial automation (IACS)" />
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <style>
+      #app-boot {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem;
+        font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        background: #0a1628;
+        color: #e2e8f0;
+      }
+      #app-boot .panel {
+        max-width: 28rem;
+        text-align: center;
+      }
+      #app-boot h1 {
+        margin: 0 0 0.5rem;
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: #fff;
+      }
+      #app-boot p {
+        margin: 0;
+        font-size: 0.875rem;
+        color: #94a3b8;
+        line-height: 1.5;
+      }
+      #app-boot .spinner {
+        width: 2rem;
+        height: 2rem;
+        margin: 0 auto 1rem;
+        border: 3px solid #1e4976;
+        border-top-color: #60a5fa;
+        border-radius: 50%;
+        animation: boot-spin 0.8s linear infinite;
+      }
+      @keyframes boot-spin {
+        to { transform: rotate(360deg); }
+      }
+    </style>
   </head>
   <body class="bg-industrial-950 text-slate-100">
-    <div id="root"></div>
+    <noscript>
+      <div style="min-height:100vh;display:flex;align-items:center;justify-content:center;padding:2rem;background:#0a1628;color:#e2e8f0;font-family:system-ui,sans-serif;text-align:center;">
+        <div>
+          <h1 style="color:#fff;margin:0 0 0.5rem;">JavaScript required</h1>
+          <p style="color:#94a3b8;margin:0;">Enable JavaScript to use the IEC 62443 Assessment Platform.</p>
+        </div>
+      </div>
+    </noscript>
+    <div id="root">
+      <div id="app-boot" aria-live="polite">
+        <div class="panel">
+          <div class="spinner" aria-hidden="true"></div>
+          <h1>IEC 62443 Assessment Platform</h1>
+          <p>Loading compliance dashboard…</p>
+        </div>
+      </div>
+    </div>
+    <script>
+      window.__APP_BOOT_TIMEOUT = window.setTimeout(function () {
+        var boot = document.getElementById('app-boot');
+        if (!boot) return;
+        boot.innerHTML =
+          '<div class="panel">' +
+          '<h1>Still loading?</h1>' +
+          '<p style="margin-top:0.75rem;">Your browser may be using a cached copy of this site. ' +
+          'Hard refresh (Ctrl+Shift+R or Cmd+Shift+R), or open in a private/incognito window.</p>' +
+          '<p style="margin-top:0.75rem;"><a href="./#/" style="color:#60a5fa;">Open app at #/</a></p>' +
+          '</div>';
+      }, 8000);
+      window.addEventListener('error', function (event) {
+        var target = event.target;
+        if (!target || target.tagName !== 'SCRIPT') return;
+        window.clearTimeout(window.__APP_BOOT_TIMEOUT);
+        var root = document.getElementById('root');
+        if (!root) return;
+        root.innerHTML =
+          '<div id="app-boot"><div class="panel">' +
+          '<h1>App failed to load</h1>' +
+          '<p style="margin-top:0.75rem;">Scripts could not be downloaded (often caused by a stale browser cache after an update).</p>' +
+          '<p style="margin-top:0.75rem;">Hard refresh: <strong>Ctrl+Shift+R</strong> (Windows/Linux) or <strong>Cmd+Shift+R</strong> (Mac).</p>' +
+          '<p style="margin-top:0.75rem;"><a href="./#/" style="color:#60a5fa;">Try opening #/</a></p>' +
+          '</div></div>';
+      }, true);
+    </script>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
