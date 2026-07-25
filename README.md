@@ -4,6 +4,16 @@ Curated knowledge base and **practical toolkit** for IEC 62443 — the internati
 
 ---
 
+## IEEE paper (1st publication target)
+
+**Deadline Aug 16, 2026 — ICSCI 2026 (IEEE MILCOM ICS workshop)**
+
+| Step | Doc |
+|------|-----|
+| **Start here** | [`docs/ieee/STEP-BY-STEP.md`](docs/ieee/STEP-BY-STEP.md) |
+| IEEE LaTeX draft | [`docs/ieee/paper-icsci-2026.tex`](docs/ieee/paper-icsci-2026.tex) |
+| Submit | https://edas.info/N35547 |
+
 ## PhD thesis & journal paper (ready drafts)
 
 | Material | Location |
@@ -17,12 +27,16 @@ Curated knowledge base and **practical toolkit** for IEC 62443 — the internati
 
 ## Industry deployment (production-ready)
 
+**Live demo (no install):** https://yashwanth123.github.io/CyberSecurity-graduate-research-work-/
+
 ```bash
 docker compose up -d --build   # http://localhost:8080
 ```
 
 | Guide | Location |
 |-------|----------|
+| **Truth & scope** | [`docs/TRUTH-AND-SCOPE.md`](docs/TRUTH-AND-SCOPE.md) |
+| **System design** | [`docs/architecture/SYSTEM-DESIGN.md`](docs/architecture/SYSTEM-DESIGN.md) |
 | Deployment | [`docs/industry/deployment.md`](docs/industry/deployment.md) |
 | Implementation | [`docs/industry/implementation-guide.md`](docs/industry/implementation-guide.md) |
 | 15-min demo script | [`docs/industry/demo-script.md`](docs/industry/demo-script.md) |
