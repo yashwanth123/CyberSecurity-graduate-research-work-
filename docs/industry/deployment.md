@@ -40,12 +40,17 @@ Use included `webapp/nginx.conf` as site config.
 
 ---
 
-## Option 3 — GitHub Pages (public demo)
+## Option 3 — GitHub Pages (public demo — share with advisors)
 
-1. Merge to `main`
+**Live URL:** https://yashwanth123.github.io/CyberSecurity-graduate-research-work-/
+
+1. Push to `main` or `cursor/thesis-and-webapp-848f`
 2. Repository **Settings → Pages → Source: GitHub Actions**
 3. Workflow `.github/workflows/deploy-pages.yml` publishes automatically
-4. URL: `https://yashwanth123.github.io/CyberSecurity-graduate-research-work-/`
+
+**Reviewer steps:** Open URL → About → Load Pilot Case Study → review Dashboard / Zones / Risks.
+
+See [docs/TRUTH-AND-SCOPE.md](../TRUTH-AND-SCOPE.md) for honest scope of the pilot data.
 
 **Warning:** Do not enter real plant data on public URLs.
 

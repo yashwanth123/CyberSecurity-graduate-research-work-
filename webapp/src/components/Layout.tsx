@@ -9,7 +9,7 @@ const links = [
   { to: '/standards', label: 'Standards' },
   { to: '/reports', label: 'Reports' },
   { to: '/framework-mapping', label: 'NIST CSF Map' },
-  { to: '/about', label: 'About & Credit' },
+  { to: '/about', label: 'About & Review Guide' },
 ]
 
 export default function Layout({ children }: { children: React.ReactNode }) {

@@ -2,6 +2,7 @@ import { useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { useProject } from '../hooks/useProject'
 import { buildReport, importProjectData } from '../lib/report'
+import { loadSampleCaseStudy } from '../lib/sample'
 import { saveProject } from '../lib/types'
 import { Card, ProgressBar } from '../components/ui'
 
@@ -72,12 +73,9 @@ export default function Reports() {
 
   const loadSample = async () => {
     try {
-      const res = await fetch(`${import.meta.env.BASE_URL}sample-assessment.json`)
-      const raw = await res.json()
-      const imported = importProjectData(raw)
+      const imported = await loadSampleCaseStudy()
       if (imported) {
         setProject(imported)
-        saveProject(imported)
         alert('Loaded Manufacturing Pilot sample case study.')
       }
     } catch {

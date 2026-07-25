@@ -2,12 +2,19 @@ import { Link } from 'react-router-dom'
 import { Card, ProgressBar, StatCard } from '../components/ui'
 import { useProject } from '../hooks/useProject'
 import { parts, questions } from '../lib/data'
+import { loadSampleCaseStudy } from '../lib/sample'
 import { computeMaturity, riskPriority, riskScore } from '../lib/types'
 
 export default function Dashboard() {
-  const { project, updateProject } = useProject()
+  const { project, setProject, updateProject } = useProject()
 
   const answered = Object.values(project.compliance).filter((r) => r.value).length
+  const isEmpty = answered === 0 && project.zones.length === 0
+
+  const loadSample = async () => {
+    const imported = await loadSampleCaseStudy()
+    if (imported) setProject(imported)
+  }
   const overallMaturity = computeMaturity(
     project.compliance,
     questions.map((q) => q.id),
@@ -35,6 +42,25 @@ export default function Dashboard() {
           IEC 62443 compliance overview for industrial automation systems
         </p>
       </header>
+
+      {isEmpty && (
+        <div className="rounded-lg border border-amber-800/60 bg-amber-950/40 p-4 flex flex-wrap items-center justify-between gap-4">
+          <div>
+            <p className="font-medium text-amber-100">Review the IEEE paper pilot case study</p>
+            <p className="text-sm text-amber-200/80 mt-1">
+              Load the structured manufacturing scenario (49.1% maturity, zones, risks) — not live PLCs.
+              See About for scope.
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={loadSample}
+            className="px-4 py-2 rounded-lg bg-amber-800 hover:bg-amber-700 text-sm font-medium text-white shrink-0"
+          >
+            Load Pilot Case Study
+          </button>
+        </div>
+      )}
 
       <Card title="Project Settings">
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">

@@ -27,12 +27,16 @@ Curated knowledge base and **practical toolkit** for IEC 62443 — the internati
 
 ## Industry deployment (production-ready)
 
+**Live demo (no install):** https://yashwanth123.github.io/CyberSecurity-graduate-research-work-/
+
 ```bash
 docker compose up -d --build   # http://localhost:8080
 ```
 
 | Guide | Location |
 |-------|----------|
+| **Truth & scope** | [`docs/TRUTH-AND-SCOPE.md`](docs/TRUTH-AND-SCOPE.md) |
+| **System design** | [`docs/architecture/SYSTEM-DESIGN.md`](docs/architecture/SYSTEM-DESIGN.md) |
 | Deployment | [`docs/industry/deployment.md`](docs/industry/deployment.md) |
 | Implementation | [`docs/industry/implementation-guide.md`](docs/industry/implementation-guide.md) |
 | 15-min demo script | [`docs/industry/demo-script.md`](docs/industry/demo-script.md) |
