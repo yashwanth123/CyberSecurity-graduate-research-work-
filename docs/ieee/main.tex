@@ -71,7 +71,9 @@ The IEC~62443 standard series, developed by ISA99 and adopted internationally, d
 \textbf{OT security tools.} Commercial platforms (e.g., Claroty, Dragos, Nozomi) emphasize asset discovery and anomaly detection. Our artifact complements such tools by addressing \emph{normative} IEC~62443 compliance mapping and structured audit export---a reproducibility niche for researchers and OT security engineers establishing IACS Security Management Systems.
 
 \section{Methodology}
-We adopt Design Science Research (DSR)~\cite{hevner2004design}: (1)~problem identification, (2)~artifact design, (3)~demonstration, (4)~evaluation, (5)~communication. Evaluation combines descriptive metrics from a pilot case study using a structured representative manufacturing scenario developed during a university research project at California State University Channel Islands.
+We adopt Design Science Research (DSR)~\cite{hevner2004design}: (1)~problem identification, (2)~artifact design, (3)~demonstration, (4)~evaluation, (5)~communication. Evaluation combines descriptive metrics from a \emph{pilot} case study using a structured representative manufacturing scenario developed during a university research project at California State University Channel Islands.
+
+\textbf{Structured pilot scenario.} The case study is \emph{not} an on-site plant audit or hardware-in-the-loop test. Instead, we define a reference architecture (Purdue-style zones, representative assets, conduits) and a reproducible JSON dataset (\texttt{sample-assessment.json}) containing 107 compliance responses, five zone records, and ten risk entries. A Python script seeds brownfield-like answer distributions; zones and risks were authored from common OT weakness patterns in the literature. The open-source tool computes all reported metrics from this input---demonstrating the assessment pipeline rather than validating live operational telemetry.
 
 \textbf{System Under Consideration (SuC).} The SuC models a representative assembly line with four Siemens S7-1500 PLCs, HMIs, engineering workstations, PI historian connectivity, MES integration, and vendor remote access via a DMZ jump host---consistent with published brownfield manufacturing OT architectures.
 
@@ -98,6 +100,17 @@ The platform comprises four browser-based modules backed by local storage (no cl
 
 \textbf{Deployment.} Static build (React/Vite) deploys via Docker/nginx or GitHub Pages. Python scripts regenerate JSON from the source Excel matrix.
 
+\textbf{Architecture.} Fig.~\ref{fig:architecture} shows the zones-and-conduits module with SL-T/SL-A comparison for the pilot scenario. All assessment data remain in browser \texttt{localStorage} unless the user exports JSON/CSV; no OT configuration data are transmitted to external services---supporting air-gapped engineering use.
+
+\begin{figure}[!t]
+\centering
+\includegraphics[width=\linewidth]{figures/zones-screenshot.png}
+\caption{Zones and conduits view with SL-T/SL-A gaps (pilot scenario). Live demo: GitHub Pages deployment.}
+\label{fig:architecture}
+\end{figure}
+
+\textbf{Reproducibility pipeline.} (1)~Excel compliance matrix $\rightarrow$ \texttt{extract\_requirements.py} $\rightarrow$ \texttt{iec62443.json}; (2)~optional \texttt{generate\_sample\_case\_study.py} $\rightarrow$ pilot dataset; (3)~web app load $\rightarrow$ dashboard metrics; (4)~export JSON/CSV for audit evidence. This pipeline supports thesis replication and practitioner baseline assessments without vendor lock-in.
+
 \section{Case Study Results}
 \subsection{Compliance Maturity}
 Overall maturity was \textbf{49.1\%}. By standard part: General 66.7\%, Policies and Procedures 55.0\%, System 43.6\%, Component 53.4\%. System requirements---including monitoring, segmentation verification, and SL-A documentation---showed the largest gap, consistent with brownfield sites lacking dedicated OT security staff.
@@ -110,21 +123,45 @@ Overall maturity was \textbf{49.1\%}. By standard part: General 66.7\%, Policies
 \end{figure}
 
 \subsection{Security Level Analysis}
-Five zones were modeled (Enterprise through Control). Two exhibited SL gaps:
-\begin{itemize}
-    \item \textbf{DMZ} (SL-T=3, SL-A=2): vendor jump server, patch relay.
-    \item \textbf{Operations} (SL-T=3, SL-A=2): HMIs, engineering workstations, historian.
-\end{itemize}
-Control zone achieved SL-A=3; Enterprise zones met SL-T=2.
+Five zones were modeled (Enterprise through Control). Table~\ref{tab:zones} summarizes SL-T, SL-Achieved, and $\Delta$SL. Two zones exhibited gaps ($\Delta$SL $= 1$): DMZ (vendor jump host, patch relay) and Operations (HMIs, engineering workstations, historian). Control achieved SL-A=3 matching SL-T=3; Enterprise zones met SL-T=2.
+
+\begin{table}[!t]
+\caption{Zone Security Levels (Purdue Reference Model)}
+\label{tab:zones}
+\centering
+\small
+\begin{tabular}{lccc}
+\hline
+Zone & SL-T & SL-A & $\Delta$SL \\
+\hline
+L5 Enterprise & 2 & 2 & 0 \\
+L4 Site Business & 2 & 2 & 0 \\
+L3.5 DMZ & 3 & 2 & 1 \\
+L3 Operations & 3 & 2 & 1 \\
+L2 Control (4$\times$ S7-1500) & 3 & 3 & 0 \\
+\hline
+\end{tabular}
+\end{table}
 
 \subsection{Risk Register}
-Ten risks were identified; eight remain open. Four critical risks ($R \geq 15$):
-\begin{enumerate}
-    \item Vendor remote access jump server ($R=20$): shared credentials, no MFA.
-    \item Engineering workstation USB exposure ($R=16$): removable media enabled.
-    \item Unpatched PLC firmware ($R=15$): no OT patch test environment.
-    \item MES--OT bidirectional integration ($R=15$): lacking application firewall.
-\end{enumerate}
+Ten risks were identified; eight remain open. Table~\ref{tab:risks} lists critical items ($R \geq 15$). Vendor remote access scored highest ($R=20$) despite moderate System-part compliance---illustrating why integrated risk scoring complements checklist maturity.
+
+\begin{table}[!t]
+\caption{Critical Risks ($R \geq 15$) from Pilot Scenario}
+\label{tab:risks}
+\centering
+\small
+\begin{tabular}{p{0.22\linewidth}cccp{0.18\linewidth}}
+\hline
+Asset & $L$ & $I$ & $R$ & Zone \\
+\hline
+Vendor jump server & 4 & 5 & 20 & DMZ \\
+Engineering WS (USB) & 4 & 4 & 16 & Operations \\
+S7-1500 PLCs & 3 & 5 & 15 & Control \\
+MES--OT integration & 3 & 5 & 15 & Site Business \\
+\hline
+\end{tabular}
+\end{table}
 
 \subsection{Integrated Findings}
 Compliance maturity alone would emphasize System-part controls (43.6\%) but not prioritize vendor access (DMZ) as the highest risk score. Integrated analysis recommends: (1)~MFA on jump servers within 90 days; (2)~OT patch program per 62443-2-3; (3)~MES--OT conduit hardening within 12 months.
@@ -150,9 +187,11 @@ Component & 53.4 & 29 \\
 \section{Discussion}
 Results align with practitioner reports: manufacturing sites initiate IEC~62443 program documentation (Policies 55\%) before completing technical SL verification (System 43.6\%). SL gaps concentrate at IT/OT integration boundaries---a finding consistent with 62443-3-2 conduit emphasis.
 
-\textbf{Limitations.} The evaluation uses a structured pilot scenario rather than a live plant assessment; SL-A values are assigned analytically; the 107-question set is a subset of the full standard. Field validation at an operational facility is planned future work.
+\textbf{Limitations.} Four limitations bound generalizability: (1)~structured pilot input rather than live plant walk-through; (2)~SL-Achieved values assigned analytically, not verified from device configurations; (3)~107-question subset of the full 62443 corpus; (4)~single assessor, no inter-rater reliability study. These constraints are appropriate for an artifact demonstration paper but require field validation before operational certification claims.
 
-\textbf{Industry implications.} OT teams can deploy the Docker-packaged tool on engineering networks without external data transfer. NIST Cybersecurity Framework cross-mapping supports communication with IT security stakeholders.
+\textbf{Threats to validity.} Construct validity: maturity scoring treats Partial as 0.5 Yes---sensitive to assessor judgment. External validity: one fictional manufacturing scenario may not represent all sectors (e.g., chemical, water). Conclusion validity: integrated prioritization is descriptive; no control group compared against spreadsheet-only assessment.
+
+\textbf{Industry implications.} OT teams can deploy the Docker-packaged tool on engineering networks without external data transfer. Practitioners can replace pilot JSON with site-specific assessor input while retaining the same SL-gap and risk workflows. NIST Cybersecurity Framework cross-mapping in the tool supports communication with IT security stakeholders.
 
 \section{Conclusion and Future Work}
 We presented an open IEC~62443 assessment framework validated through a pilot manufacturing IACS scenario. Future work includes multi-site validation with operational facilities, dual-assessor reliability study, automated SL-A verification from configuration exports, and integration with passive OT asset discovery.
