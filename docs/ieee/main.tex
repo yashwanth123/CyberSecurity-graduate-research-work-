@@ -10,6 +10,8 @@
 \usepackage{url}
 \usepackage{booktabs}
 \usepackage{float}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,fit,calc}
 \usepackage{newtxtext,newtxmath}
 \usepackage{courier}
 \usepackage[letterpaper, top=0.88in, bottom=1.05in, left=0.68in, right=0.68in]{geometry}
@@ -63,12 +65,33 @@ The IEC~62443 standard series, developed by ISA99 and adopted internationally, d
     \item Evidence that integrated assessment prioritizes remediation beyond checklist scores alone.
 \end{enumerate}
 
+The remainder of this paper is organized as follows: Section~II reviews related frameworks and tools; Section~III describes the DSR methodology and structured pilot scenario; Section~IV presents artifact architecture and deployment; Section~V reports case study metrics; Section~VI discusses validity and practitioner implications; Section~VII concludes.
+
 \section{Related Work}
 \textbf{IACS security frameworks.} NIST SP~800-82 Rev.~3~\cite{stouffer2023nist825} provides ICS-specific security guidance but does not define SL-T or zones/conduits using IEC semantics. ISO/IEC~27019 addresses process control in IT-dependent environments but complements rather than replaces 62443 for OT components.
 
 \textbf{IEC~62443 application.} Practitioner literature from SANS and ISA99 introduces program-level implementation~\cite{isa99intro}. Academic work includes IIoT vulnerability assessment mapped to 62443 and energy-sector case analyses. VTT technical reports document industrial cyber risk in Nordic critical infrastructure~\cite{vtt2018industrial}. These sources establish theoretical grounding but rarely ship maintainable assessment tools.
 
 \textbf{OT security tools.} Commercial platforms (e.g., Claroty, Dragos, Nozomi) emphasize asset discovery and anomaly detection. Our artifact complements such tools by addressing \emph{normative} IEC~62443 compliance mapping and structured audit export---a reproducibility niche for researchers and OT security engineers establishing IACS Security Management Systems.
+
+\textbf{Assessment tooling gap.} Spreadsheet-based 62443 checklists dominate practitioner workflows but lack version control, SL-T calculators, and exportable evidence bundles. Published academic prototypes typically address single standard clauses (e.g., zones only or component requirements only) rather than integrated compliance, SL, and risk views.
+
+\begin{table}[!t]
+\caption{Comparison of Assessment Approaches}
+\label{tab:comparison}
+\centering
+\small
+\begin{tabular}{lccc}
+\hline
+Capability & Spreadsheet & OT Discovery & This work \\
+\hline
+62443 checklist & Partial & No & Yes \\
+SL-T / SL-A gaps & Manual & Partial & Yes \\
+Risk register & Separate & Alerts & Integrated \\
+Reproducible export & No & Vendor & JSON/CSV \\
+\hline
+\end{tabular}
+\end{table}
 
 \section{Methodology}
 We adopt Design Science Research (DSR)~\cite{hevner2004design}: (1)~problem identification, (2)~artifact design, (3)~demonstration, (4)~evaluation, (5)~communication. Evaluation combines descriptive metrics from a \emph{pilot} case study using a structured representative manufacturing scenario developed during a university research project at California State University Channel Islands.
@@ -87,6 +110,8 @@ where $Y$ counts ``Yes'' responses, $P$ counts ``Partial,'' excluding N/A.
 
 \textbf{SL gap.} For each zone, $\Delta SL = SL\text{-}T - SL\text{-}A$; positive gap indicates remediation need per IEC~62443-3-2 verification guidance.
 
+\textbf{Assessment procedure.} Evaluators follow six steps: (1)~define SuC scope and sector; (2)~model zones/conduits and assign SL-T per threat profile; (3)~complete the 107-item checklist with evidence notes; (4)~record SL-Achieved per zone; (5)~register risks with $L$, $I$, and mitigations; (6)~export JSON/CSV for audit trail. All steps are supported in a single browser session without cloud dependency.
+
 \section{Artifact Design}
 The platform comprises four browser-based modules backed by local storage (no cloud upload of sensitive OT data):
 
@@ -100,16 +125,67 @@ The platform comprises four browser-based modules backed by local storage (no cl
 
 \textbf{Deployment.} Static build (React/Vite) deploys via Docker/nginx or GitHub Pages. Python scripts regenerate JSON from the source Excel matrix.
 
-\textbf{Architecture.} Fig.~\ref{fig:architecture} shows the zones-and-conduits module with SL-T/SL-A comparison for the pilot scenario. All assessment data remain in browser \texttt{localStorage} unless the user exports JSON/CSV; no OT configuration data are transmitted to external services---supporting air-gapped engineering use.
+\textbf{Architecture.} Fig.~\ref{fig:architecture} depicts the four-module assessment stack and export path. Project state is persisted in browser \texttt{localStorage}; practitioners on isolated OT engineering networks can run the Docker image without external connectivity.
 
 \begin{figure}[!t]
 \centering
-\includegraphics[width=\linewidth]{figures/zones-screenshot.png}
-\caption{Zones and conduits view with SL-T/SL-A gaps (pilot scenario). Live demo: GitHub Pages deployment.}
+\resizebox{\linewidth}{!}{%
+\begin{tikzpicture}[
+  node distance=0.45cm and 0.35cm,
+  box/.style={draw, rounded corners=2pt, align=center, font=\small,
+    minimum width=2.05cm, minimum height=0.75cm, fill=gray!8},
+  arrow/.style={-{Stealth[length=2mm]}, thick}
+]
+\node[box] (comp) {Compliance\\107 Q};
+\node[box, right=of comp] (sl) {SL-T\\Calculator};
+\node[box, right=of sl] (zones) {Zones \&\\Conduits};
+\node[box, right=of zones] (risk) {Risk\\Register};
+\node[box, below=0.7cm of sl, minimum width=4.6cm] (store) {Project JSON / localStorage};
+\node[box, below=0.7cm of risk, minimum width=2.4cm] (export) {JSON / CSV\\Export};
+\draw[arrow] (comp) -- (store);
+\draw[arrow] (sl) -- (store);
+\draw[arrow] (zones) -- (store);
+\draw[arrow] (risk) -- (store);
+\draw[arrow] (store) -- (export);
+\node[font=\footnotesize, above=0.05cm of comp] {IEC 62443 Parts 1--4};
+\node[font=\footnotesize, above=0.05cm of zones] {62443-3-2};
+\end{tikzpicture}%
+}
+\caption{Assessment platform module architecture and local export pipeline.}
 \label{fig:architecture}
 \end{figure}
 
-\textbf{Reproducibility pipeline.} (1)~Excel compliance matrix $\rightarrow$ \texttt{extract\_requirements.py} $\rightarrow$ \texttt{iec62443.json}; (2)~optional \texttt{generate\_sample\_case\_study.py} $\rightarrow$ pilot dataset; (3)~web app load $\rightarrow$ dashboard metrics; (4)~export JSON/CSV for audit evidence. This pipeline supports thesis replication and practitioner baseline assessments without vendor lock-in.
+Fig.~\ref{fig:zones} models the Purdue-style reference architecture used in the pilot scenario. Conduits between DMZ, Operations, and Control zones represent typical IT/OT integration paths where SL gaps were observed.
+
+\begin{figure}[!t]
+\centering
+\resizebox{\linewidth}{!}{%
+\begin{tikzpicture}[
+  zone/.style={draw, thick, align=center, font=\small, minimum width=2.35cm, minimum height=0.65cm},
+  gap/.style={zone, fill=orange!15},
+  ok/.style={zone, fill=green!10},
+  arrow/.style={-{Stealth[length=2mm]}, thick}
+]
+\node[ok] (l5) {L5 Enterprise\\SL 2/2};
+\node[ok, below=0.35cm of l5] (l4) {L4 Site Business\\SL 2/2};
+\node[gap, below=0.35cm of l4] (dmz) {L3.5 DMZ\\SL 3/2};
+\node[gap, below=0.35cm of dmz] (ops) {L3 Operations\\SL 3/2};
+\node[ok, below=0.35cm of ops] (ctrl) {L2 Control\\SL 3/3};
+\draw[arrow] (l5) -- (l4);
+\draw[arrow] (l4) -- (dmz);
+\draw[arrow] (dmz) -- (ops);
+\draw[arrow] (ops) -- (ctrl);
+\node[font=\footnotesize, right=0.05cm of dmz] {$\Delta$SL=1};
+\node[font=\footnotesize, right=0.05cm of ops] {$\Delta$SL=1};
+\end{tikzpicture}%
+}
+\caption{Purdue reference zones for pilot scenario (SL-T/SL-A). Shaded zones indicate SL gaps.}
+\label{fig:zones}
+\end{figure}
+
+\textbf{Data model.} A single \texttt{ProjectData} JSON object aggregates \texttt{compliance} (question-id $\rightarrow$ response), \texttt{zones} (SL-T, SL-A, assets, conduit targets), and \texttt{risks} (threat, vulnerability, $L$, $I$, mitigation). This schema enables round-trip import/export and scriptable regeneration from the Excel source matrix.
+
+\textbf{Reproducibility pipeline.} (1)~Excel compliance matrix $\rightarrow$ \texttt{extract\_requirements.py} $\rightarrow$ \texttt{iec62443.json}; (2)~optional \texttt{generate\_sample\_case\_study.py} $\rightarrow$ pilot dataset; (3)~web app load $\rightarrow$ dashboard metrics; (4)~export JSON/CSV for audit evidence. The live demo is deployed at GitHub Pages for reviewer access without local installation.
 
 \section{Case Study Results}
 \subsection{Compliance Maturity}
@@ -166,6 +242,8 @@ MES--OT integration & 3 & 5 & 15 & Site Business \\
 \subsection{Integrated Findings}
 Compliance maturity alone would emphasize System-part controls (43.6\%) but not prioritize vendor access (DMZ) as the highest risk score. Integrated analysis recommends: (1)~MFA on jump servers within 90 days; (2)~OT patch program per 62443-2-3; (3)~MES--OT conduit hardening within 12 months.
 
+Compared with a spreadsheet-only baseline, the artifact surfaces three additional decision inputs in one session: SL-gap visualization (Fig.~\ref{fig:zones}), risk heat-map prioritization, and machine-readable export for GRC tools---reducing manual transcription errors common in multi-tab Excel assessments.
+
 \begin{table}[!t]
 \caption{Compliance Maturity by IEC 62443 Part}
 \label{tab:maturity}
@@ -191,10 +269,10 @@ Results align with practitioner reports: manufacturing sites initiate IEC~62443 
 
 \textbf{Threats to validity.} Construct validity: maturity scoring treats Partial as 0.5 Yes---sensitive to assessor judgment. External validity: one fictional manufacturing scenario may not represent all sectors (e.g., chemical, water). Conclusion validity: integrated prioritization is descriptive; no control group compared against spreadsheet-only assessment.
 
-\textbf{Industry implications.} OT teams can deploy the Docker-packaged tool on engineering networks without external data transfer. Practitioners can replace pilot JSON with site-specific assessor input while retaining the same SL-gap and risk workflows. NIST Cybersecurity Framework cross-mapping in the tool supports communication with IT security stakeholders.
+\textbf{Industry implications.} OT teams can deploy the Docker-packaged tool on engineering networks without external data transfer. Practitioners can replace pilot JSON with site-specific assessor input while retaining the same SL-gap and risk workflows. NIST Cybersecurity Framework cross-mapping in the tool supports communication with IT security stakeholders. For brownfield plants, the structured pilot demonstrates how to document compensating controls when SL-A lags SL-T at DMZ and Operations boundaries.
 
 \section{Conclusion and Future Work}
-We presented an open IEC~62443 assessment framework validated through a pilot manufacturing IACS scenario. Future work includes multi-site validation with operational facilities, dual-assessor reliability study, automated SL-A verification from configuration exports, and integration with passive OT asset discovery.
+We presented an open IEC~62443 assessment framework validated through a pilot manufacturing IACS scenario. The study shows that 49.1\% checklist maturity understates urgency when vendor remote access yields $R=20$ despite partial policy compliance. Future work includes: (1)~multi-site validation with operational facilities and dual assessors; (2)~automated SL-A verification from PLC/ switch configuration exports; (3)~integration with passive OT asset discovery (e.g., Claroty, Dragos); (4)~journal-length evaluation with inter-rater reliability and sector-specific baselines for energy and water/wastewater SuCs.
 
 \textbf{Data availability.} Source code and case study export: \url{https://github.com/yashwanth123/CyberSecurity-graduate-research-work-}
 
