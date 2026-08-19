@@ -33,7 +33,7 @@ Email: yashwanthsai.tirukkovalluru058@myci.csuci.edu}
 \maketitle
 
 \begin{abstract}
-Industrial Automation and Control Systems (IACS) in manufacturing environments face escalating cyber threats while operational constraints limit the application of conventional IT security controls. The IEC 62443 standard family provides comprehensive guidance for IACS security, including Security Level (SL) targets, zones and conduits, and security management systems; however, practitioners lack integrated, reproducible tools that combine compliance assessment with risk-based prioritization. This paper presents the design and implementation of an open-source web assessment platform that operationalizes IEC 62443 through four modules: a 107-item compliance checklist mapped to standard parts 1-4, an SL-Target calculator based on the IEC threat actor model, a zones-and-conduits planner aligned with IEC 62443-3-2, and a five-by-five risk register. We validate the artifact through a pilot case study using a structured representative manufacturing scenario developed at California State University Channel Islands. Results show 49.1\% overall compliance maturity, with System requirements lowest (43.6\%) and two of five architectural zones exhibiting SL-Achieved below SL-Target (DMZ and Operations). Ten risks were registered, including four critical items (risk score at least 15) related to vendor remote access, unpatched PLCs, and MES-OT integration. The study demonstrates that integrated SL-gap and risk analysis surfaces remediation priorities not evident from compliance percentage alone. The artifact, dataset pipeline, and export formats support reproducible OT security research and practitioner baseline assessments.
+Industrial Automation and Control Systems (IACS) in manufacturing environments face escalating cyber threats while operational constraints limit the application of conventional IT security controls. The IEC 62443 standard family provides comprehensive guidance for IACS security, including Security Level (SL) targets, zones and conduits, and security management systems; however, practitioners lack integrated, reproducible tools that combine compliance assessment with risk-based prioritization. This paper presents the design and implementation of an open-source web assessment platform that operationalizes IEC 62443 through four modules: a 107-item compliance checklist mapped to standard parts 1-4, an SL-Target calculator based on the IEC threat actor model, a zones-and-conduits planner aligned with IEC 62443-3-2, and a five-by-five risk register. We validate the artifact through a pilot case study using a structured representative manufacturing scenario developed at California State University Channel Islands. Results show 49.1\% overall compliance maturity, with System requirements lowest (47.4\%) and two of five architectural zones exhibiting SL-Achieved below SL-Target (DMZ and Operations). Ten risks were registered, including four critical items (risk score at least 15) related to vendor remote access, unpatched PLCs, and MES-OT integration. The study demonstrates that integrated SL-gap and risk analysis surfaces remediation priorities not evident from compliance percentage alone. The artifact, dataset pipeline, and export formats support reproducible OT security research and practitioner baseline assessments.
 \end{abstract}
 
 \begin{IEEEkeywords}
@@ -221,7 +221,7 @@ L2 Control & 4$\times$ Siemens S7-1500, safety PLC \\
 
 \section{Case Study Results}
 \subsection{Compliance Maturity}
-Overall maturity was \textbf{49.1\%}. By standard part: General 66.7\%, Policies and Procedures 55.0\%, System 43.6\%, Component 53.4\%. System requirements---including monitoring, segmentation verification, and SL-A documentation---showed the largest gap, consistent with brownfield sites lacking dedicated OT security staff.
+Overall maturity was \textbf{49.1\%}. By standard part: General 66.7\%, Policies and Procedures 50.0\%, System 47.4\%, Component 48.6\%. System requirements---including monitoring, segmentation verification, and SL-A documentation---showed the largest gap, consistent with brownfield sites lacking dedicated OT security staff.
 
 \begin{figure}[H]
 \centering
@@ -272,7 +272,7 @@ MES--OT integration & 3 & 5 & 15 & Site Business \\
 \end{table}
 
 \subsection{Integrated Findings}
-Compliance maturity alone would emphasize System-part controls (43.6\%) but not prioritize vendor access (DMZ) as the highest risk score. Integrated analysis recommends: (1)~MFA on jump servers within 90 days; (2)~OT patch program per 62443-2-3; (3)~MES--OT conduit hardening within 12 months.
+Compliance maturity alone would emphasize System-part controls (47.4\%) but not prioritize vendor access (DMZ) as the highest risk score. Integrated analysis recommends: (1)~MFA on jump servers within 90 days; (2)~OT patch program per 62443-2-3; (3)~MES--OT conduit hardening within 12 months.
 
 Compared with a spreadsheet-only baseline, the artifact surfaces three additional decision inputs in one session: SL-gap visualization (Fig.~\ref{fig:zones}), risk heat-map prioritization, and machine-readable export for GRC tools---reducing manual transcription errors common in multi-tab Excel assessments.
 
@@ -289,7 +289,7 @@ Table~\ref{tab:roadmap} prioritizes pilot findings into a practitioner roadmap. 
 Action & Horizon & Driver \\
 \hline
 MFA on vendor jump server & 90 days & Risk $R{=}20$ \\
-OT firmware patch program & 6 months & Risk $R{=}15$, Sys.~43.6\% \\
+OT firmware patch program & 6 months & Risk $R{=}15$, Sys.~47.4\% \\
 MES--OT conduit firewall & 12 months & Risk $R{=}15$ \\
 USB control on EWS & 6 months & Risk $R{=}16$ \\
 Document SL-A for DMZ/Ops & 3 months & $\Delta$SL$=1$ \\
@@ -306,9 +306,9 @@ Document SL-A for DMZ/Ops & 3 months & $\Delta$SL$=1$ \\
 Part & Maturity (\%) & $n$ \\
 \hline
 General & 66.7 & 3 \\
-Policies \& Procedures & 55.0 & 20 \\
-System & 43.6 & 55 \\
-Component & 53.4 & 29 \\
+Policies \& Procedures & 50.0 & 31 \\
+System & 47.4 & 38 \\
+Component & 48.6 & 35 \\
 \hline
 \textbf{Overall} & \textbf{49.1} & \textbf{107} \\
 \hline
@@ -316,7 +316,7 @@ Component & 53.4 & 29 \\
 \end{table}
 
 \section{Discussion}
-Results align with practitioner reports: manufacturing sites initiate IEC~62443 program documentation (Policies 55\%) before completing technical SL verification (System 43.6\%). SL gaps concentrate at IT/OT integration boundaries---a finding consistent with 62443-3-2 conduit emphasis.
+Results align with practitioner reports: manufacturing sites initiate IEC~62443 program documentation (Policies 50\%) before completing technical SL verification (System 47.4\%). SL gaps concentrate at IT/OT integration boundaries---a finding consistent with 62443-3-2 conduit emphasis.
 
 \textbf{Limitations.} Four limitations bound generalizability: (1)~structured pilot input rather than live plant walk-through; (2)~SL-Achieved values assigned analytically, not verified from device configurations; (3)~107-question subset of the full 62443 corpus; (4)~single assessor, no inter-rater reliability study. These constraints are appropriate for an artifact demonstration paper but require field validation before operational certification claims.
 
