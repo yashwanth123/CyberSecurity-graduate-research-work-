@@ -14,20 +14,10 @@
 \usetikzlibrary{arrows.meta,positioning,fit,calc}
 \usepackage{newtxtext,newtxmath}
 \usepackage{courier}
-\usepackage[letterpaper, top=0.88in, bottom=1.05in, left=0.68in, right=0.68in]{geometry}
-
-\setlength{\columnsep}{0.27in}
-
-\makeatletter
-\renewcommand{\normalsize}{%
-   \@setfontsize\normalsize{11.5}{14}%
-   \abovedisplayskip 10\p@ \@plus2\p@ \@minus5\p@
-   \abovedisplayshortskip \z@ \@plus3\p@
-   \belowdisplayshortskip 6\p@ \@plus3\p@ \@minus3\p@
-   \belowdisplayskip \abovedisplayskip
-   \let\@listi\@listI}
-\normalsize
-\makeatother
+% ICSCI workshop: use default IEEE margins for 5--6 page target.
+% (Re-enable geometry block below only for EDAS format re-checks.)
+% \usepackage[letterpaper, top=0.88in, bottom=1.05in, left=0.68in, right=0.68in]{geometry}
+% \setlength{\columnsep}{0.27in}
 
 \title{An Open IEC 62443 Assessment Framework for Manufacturing IACS: Design and Empirical Case Study}
 
@@ -187,6 +177,48 @@ Fig.~\ref{fig:zones} models the Purdue-style reference architecture used in the 
 
 \textbf{Reproducibility pipeline.} (1)~Excel compliance matrix $\rightarrow$ \texttt{extract\_requirements.py} $\rightarrow$ \texttt{iec62443.json}; (2)~optional \texttt{generate\_sample\_case\_study.py} $\rightarrow$ pilot dataset; (3)~web app load $\rightarrow$ dashboard metrics; (4)~export JSON/CSV for audit evidence. The live demo is deployed at GitHub Pages for reviewer access without local installation.
 
+\subsection{Implementation Stack}
+Table~\ref{tab:stack} summarizes the implementation. The frontend uses React~18 with TypeScript and Vite for fast iteration; assessment logic and scoring functions reside in shared TypeScript modules (\texttt{types.ts}, \texttt{report.ts}) to keep UI and export semantics consistent. The Docker image serves the static build via nginx on port~8080 for offline OT engineering VLANs.
+
+\begin{table}[!t]
+\caption{Technology Stack by Layer}
+\label{tab:stack}
+\centering
+\small
+\begin{tabular}{ll}
+\hline
+Layer & Technology \\
+\hline
+UI & React, TypeScript, Tailwind CSS, Vite \\
+Data & Browser localStorage, JSON schema \\
+Backend scripts & Python 3 (Excel $\rightarrow$ JSON pipeline) \\
+Deployment & Docker, nginx, GitHub Actions/Pages \\
+Standards map & IEC 62443 Parts 1--4, 62443-3-2 zones \\
+\hline
+\end{tabular}
+\end{table}
+
+\subsection{Pilot Scenario Assets}
+Table~\ref{tab:assets} lists representative assets in the structured pilot SuC. Assets are modeled for architectural completeness; no live device interrogation was performed.
+
+\begin{table}[!t]
+\caption{Representative Assets in Pilot System Under Consideration}
+\label{tab:assets}
+\centering
+\small
+\begin{tabular}{ll}
+\hline
+Zone & Representative assets \\
+\hline
+L5 Enterprise & SAP ERP, Active Directory, email \\
+L4 Site Business & MES server, batch historian, file server \\
+L3.5 DMZ & Vendor jump host, patch relay, OT AV \\
+L3 Operations & 3$\times$ HMI, 2$\times$ EWS, PI connector \\
+L2 Control & 4$\times$ Siemens S7-1500, safety PLC \\
+\hline
+\end{tabular}
+\end{table}
+
 \section{Case Study Results}
 \subsection{Compliance Maturity}
 Overall maturity was \textbf{49.1\%}. By standard part: General 66.7\%, Policies and Procedures 55.0\%, System 43.6\%, Component 53.4\%. System requirements---including monitoring, segmentation verification, and SL-A documentation---showed the largest gap, consistent with brownfield sites lacking dedicated OT security staff.
@@ -244,6 +276,27 @@ Compliance maturity alone would emphasize System-part controls (43.6\%) but not 
 
 Compared with a spreadsheet-only baseline, the artifact surfaces three additional decision inputs in one session: SL-gap visualization (Fig.~\ref{fig:zones}), risk heat-map prioritization, and machine-readable export for GRC tools---reducing manual transcription errors common in multi-tab Excel assessments.
 
+\subsection{Remediation Roadmap}
+Table~\ref{tab:roadmap} prioritizes pilot findings into a practitioner roadmap. Items derive from integrated compliance, SL-gap, and risk outputs---not from a standalone checklist score.
+
+\begin{table}[!t]
+\caption{Prioritized Remediation Roadmap (Pilot Scenario)}
+\label{tab:roadmap}
+\centering
+\small
+\begin{tabular}{p{0.34\linewidth}cl}
+\hline
+Action & Horizon & Driver \\
+\hline
+MFA on vendor jump server & 90 days & Risk $R{=}20$ \\
+OT firmware patch program & 6 months & Risk $R{=}15$, Sys.~43.6\% \\
+MES--OT conduit firewall & 12 months & Risk $R{=}15$ \\
+USB control on EWS & 6 months & Risk $R{=}16$ \\
+Document SL-A for DMZ/Ops & 3 months & $\Delta$SL$=1$ \\
+\hline
+\end{tabular}
+\end{table}
+
 \begin{table}[!t]
 \caption{Compliance Maturity by IEC 62443 Part}
 \label{tab:maturity}
@@ -268,6 +321,8 @@ Results align with practitioner reports: manufacturing sites initiate IEC~62443 
 \textbf{Limitations.} Four limitations bound generalizability: (1)~structured pilot input rather than live plant walk-through; (2)~SL-Achieved values assigned analytically, not verified from device configurations; (3)~107-question subset of the full 62443 corpus; (4)~single assessor, no inter-rater reliability study. These constraints are appropriate for an artifact demonstration paper but require field validation before operational certification claims.
 
 \textbf{Threats to validity.} Construct validity: maturity scoring treats Partial as 0.5 Yes---sensitive to assessor judgment. External validity: one fictional manufacturing scenario may not represent all sectors (e.g., chemical, water). Conclusion validity: integrated prioritization is descriptive; no control group compared against spreadsheet-only assessment.
+
+\textbf{Practitioner uptake.} The artifact targets OT security engineers and GRC analysts establishing an IACS Security Management System (CSMS) per IEC~62443-2-1. Because assessments often occur on engineering laptops without cloud access, local-only storage and Docker deployment were explicit design requirements. Cross-mapping to NIST CSF~2.0 functions (Identify, Protect, Detect) is included in the tool to support joint IT/OT steering committees where IEC terminology is unfamiliar to enterprise security teams.
 
 \textbf{Industry implications.} OT teams can deploy the Docker-packaged tool on engineering networks without external data transfer. Practitioners can replace pilot JSON with site-specific assessor input while retaining the same SL-gap and risk workflows. NIST Cybersecurity Framework cross-mapping in the tool supports communication with IT security stakeholders. For brownfield plants, the structured pilot demonstrates how to document compensating controls when SL-A lags SL-T at DMZ and Operations boundaries.
 
